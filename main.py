@@ -20,7 +20,6 @@ for hostline in hosts:
     hostline = hostline.split(",")
     hostdict[bytes(hostline[1], 'utf-8')] = bytes(hostline[0], 'utf-8')
 
-print(hostdict)
 
 class OvpnResolver(client.Resolver):
     def __init__(self, mapping, servers):
@@ -29,8 +28,6 @@ class OvpnResolver(client.Resolver):
         self.ttl = 10
 
     def lookupAddress(self, name, timeout = None):
-        print(name)
-        print(self.mapping)
         if name in self.mapping:
             result = self.mapping[name]
             testres = [
@@ -39,7 +36,6 @@ class OvpnResolver(client.Resolver):
                 (),
             ]
             return testres
-            print(result)
             def packResult(value):
                 return [
                     (dns.RRHeader(name, dns.A, dns.IN, self.ttl, dns.Record_A(value, self.ttl)),), (), ()
@@ -47,7 +43,6 @@ class OvpnResolver(client.Resolver):
             result.addCallback(packResult)
             return result
         else:
-            print("Doing lookup")
             return self._lookup(name, dns.IN, dns.A, timeout)
 
 application = service.Application('dnsserver')
